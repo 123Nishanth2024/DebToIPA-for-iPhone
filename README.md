@@ -1,6 +1,5 @@
 <div align="center">
 
-<img src="Sources/Assets.xcassets/AppIcon.appiconset/icon.png" width="128" height="128" alt="Deb to IPA icon">
 
 # Deb to IPA
 
