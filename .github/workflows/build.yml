@@ -1,0 +1,49 @@
+name: Build Deb to IPA
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unpack source
+        run: |
+          if [ -f DebToIPA-source.zip ]; then unzip -o -q DebToIPA-source.zip; fi
+          if [ -f DebToIPA/project.yml ]; then echo "SRC=DebToIPA" >> "$GITHUB_ENV"; else echo "SRC=." >> "$GITHUB_ENV"; fi
+
+      - name: Install tools
+        run: |
+          brew install xcodegen
+          brew install ldid || true
+
+      - name: Build app
+        run: |
+          cd "$SRC"
+          xcodegen generate
+          xcodebuild -project DebToIPA.xcodeproj -target DebToIPA -configuration Release -sdk iphoneos \
+            ARCHS=arm64 ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            CONFIGURATION_BUILD_DIR="$GITHUB_WORKSPACE/build" build
+
+      - name: Package IPA
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          if command -v ldid >/dev/null; then
+            ldid -S build/DebToIPA.app/DebToIPA
+          else
+            codesign --force --sign - build/DebToIPA.app
+          fi
+          mkdir -p Payload
+          cp -R build/DebToIPA.app Payload/
+          zip -qry DebToIPA.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DebToIPA-ipa
+          path: DebToIPA.ipa
