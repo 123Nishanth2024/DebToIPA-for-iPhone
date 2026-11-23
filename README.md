@@ -113,8 +113,8 @@ To build your own copy, fork this repository and open the **Actions** tab.
 
 ```bash
 brew install xcodegen ldid
-git clone https://github.com/<your-username>/<your-repo>.git
-cd <your-repo>
+git clone https://github.com/123Nishanth2024/DebToIPA-for-iPhone.git
+cd DebToIPA-for-iPhone
 xcodegen generate
 open DebToIPA.xcodeproj
 ```
