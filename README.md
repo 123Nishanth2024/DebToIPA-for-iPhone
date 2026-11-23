@@ -1,53 +1,48 @@
-# DebToIPA-for-iPhone
 <div align="center">
 
 <img src="Sources/Assets.xcassets/AppIcon.appiconset/icon.png" width="128" height="128" alt="Deb to IPA icon">
 
-Deb to IPA
+# Deb to IPA
 
-Convert jailbreak .deb packages into installable .ipa files, right on your iPhone or iPad.
+**Convert jailbreak `.deb` packages into installable `.ipa` files, right on your iPhone or iPad.**
 
-iOS 15+
-Swift 5
-SwiftUI
-TrollStore
-Build
+![iOS 15+](https://img.shields.io/badge/iOS-15%2B-black?logo=apple)
+![Swift 5](https://img.shields.io/badge/Swift-5-orange?logo=swift&logoColor=white)
+![SwiftUI](https://img.shields.io/badge/UI-SwiftUI-blue)
+![TrollStore](https://img.shields.io/badge/Install%20with-TrollStore-8A2BE2)
+![Build](https://img.shields.io/badge/build-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)
 
-Features •
-Install •
-Usage •
-Build from source •
-Limitations •
-FAQ
+[Features](#features) •
+[Install](#install) •
+[Usage](#usage) •
+[Build from source](#build-from-source) •
+[Limitations](#limitations) •
+[FAQ](#faq)
 
 </div>
 
-About
+---
 
-Many apps from Cydia, Sileo and Zebra are distributed as .deb packages, which only install on jailbroken devices. Deb to IPA pulls the app out of such a package and repackages it as an .ipa, which you can then install with TrollStore.
+## About
 
-Everything happens locally on your device. Nothing is uploaded anywhere.
+Many apps from Cydia, Sileo and Zebra are distributed as `.deb` packages, which only install on jailbroken devices. **Deb to IPA** pulls the app out of such a package and repackages it as an `.ipa`, which you can then install with [TrollStore](https://github.com/opa334/TrollStore).
 
-Features
+Everything happens **locally on your device**. Nothing is uploaded anywhere.
 
-📦 On-device conversion: no computer and no internet connection needed
+## Features
 
-🔍 Finds apps automatically in both rootful (/Applications) and rootless (/var/jb/Applications) packages
+- 📦 **On-device conversion:** no computer and no internet connection needed
+- 🔍 **Finds apps automatically** in both rootful (`/Applications`) and rootless (`/var/jb/Applications`) packages
+- 🧩 **Handles packages with several apps** and creates one `.ipa` for each
+- 🚫 **Explains what can't be converted:** tweaks, Linux packages, libraries and damaged files each get a clear message
+- ⚠️ **Warns about likely problems,** such as apps that depend on jailbreak files
+- 📤 **One-tap install:** send the result straight to TrollStore from the share sheet
+- 🗂️ **Keeps converted files** in the app and in the Files app
+- 📥 **Opens `.deb` files from anywhere:** Files, Safari downloads or any share sheet
 
-🧩 Handles packages with several apps and creates one .ipa for each
+## How it works
 
-🚫 Explains what can't be converted: tweaks, Linux packages, libraries and damaged files each get a clear message
-
-⚠️ Warns about likely problems, such as apps that depend on jailbreak files
-
-📤 One-tap install: send the result straight to TrollStore from the share sheet
-
-🗂️ Keeps converted files in the app and in the Files app
-
-📥 Opens .deb files from anywhere: Files, Safari downloads or any share sheet
-
-How it works
-
+```mermaid
 flowchart LR
     A[".deb package"] --> B["Unpack ar container"]
     B --> C["Read control info"]
@@ -57,110 +52,77 @@ flowchart LR
     F --> G["Zip as .ipa"]
     G --> H["Share to TrollStore"]
     E -- "No" --> I["Explain why:<br/>tweak, Linux package, no app"]
+```
 
-An .ipa is simply a zip file with the app inside a Payload folder. Deb to IPA builds exactly that while keeping file permissions, symlinks and the app's main program intact.
+An `.ipa` is simply a zip file with the app inside a `Payload` folder. Deb to IPA builds exactly that while keeping file permissions, symlinks and the app's main program intact.
 
-What can be converted?
+## What can be converted?
 
-Package type
+| Package type | Converts? | Notes |
+| --- | :---: | --- |
+| Jailbreak app (`/Applications/*.app`) | ✅ | The main use case |
+| Rootless jailbreak app (`/var/jb/Applications/*.app`) | ✅ | May need jailbreak files to run |
+| Tweak (MobileSubstrate / ElleKit) | ❌ | There's no app inside, only changes to other apps |
+| Library, command-line tool or theme | ❌ | There's no app to package |
+| Linux / desktop `.deb` (amd64, arm64, …) | ❌ | Built for another operating system |
 
-Converts?
+## Requirements
 
-Notes
+- iPhone or iPad running **iOS 15 or later**
+- **[TrollStore](https://github.com/opa334/TrollStore)** installed (supported iOS versions depend on TrollStore)
 
-Jailbreak app (/Applications/*.app)
+## Install
 
-✅
+1. Open the **[Actions](../../actions)** tab of this repository.
+2. Select the latest successful **Build Deb to IPA** run.
+3. Download **DebToIPA-ipa** under **Artifacts** (you must be signed in to GitHub).
+4. In the Files app, tap the downloaded zip to unpack it.
+5. Share `DebToIPA.ipa` to **TrollStore** and tap **Install**.
 
-The main use case
+> [!TIP]
+> If there is no successful run yet, open **Actions → Build Deb to IPA → Run workflow** to start one.
 
-Rootless jailbreak app (/var/jb/Applications/*.app)
+## Usage
 
-✅
-
-May need jailbreak files to run
-
-Tweak (MobileSubstrate / ElleKit)
-
-❌
-
-There's no app inside, only changes to other apps
-
-Library, command-line tool or theme
-
-❌
-
-There's no app to package
-
-Linux / desktop .deb (amd64, arm64, …)
-
-❌
-
-Built for another operating system
-
-Requirements
-
-iPhone or iPad running iOS 15 or later
-
-TrollStore installed (supported iOS versions depend on TrollStore)
-
-Install
-
-Open the Actions tab of this repository.
-
-Select the latest successful Build Deb to IPA run.
-
-Download DebToIPA-ipa under Artifacts (you must be signed in to GitHub).
-
-In the Files app, tap the downloaded zip to unpack it.
-
-Share DebToIPA.ipa to TrollStore and tap Install.
-
-[!TIP]
-If there is no successful run yet, open Actions → Build Deb to IPA → Run workflow to start one.
-
-Usage
-
-Open Deb to IPA.
-
-Tap Choose a .deb file, or share a .deb to Deb to IPA from Files or Safari.
-
-Wait for the conversion to finish.
-
-Tap Install with TrollStore… and choose TrollStore in the share sheet.
+1. Open **Deb to IPA**.
+2. Tap **Choose a .deb file**, or share a `.deb` to *Deb to IPA* from Files or Safari.
+3. Wait for the conversion to finish.
+4. Tap **Install with TrollStore…** and choose **TrollStore** in the share sheet.
 
 Converted files are saved here:
 
+```
 Files → On My iPhone → Deb to IPA → Converted
+```
 
 Swipe left on a file in the app to delete it.
 
-Build from source
+## Build from source
 
-Option A: GitHub Actions (no Mac needed)
+### Option A: GitHub Actions (no Mac needed)
 
-This repository includes a workflow at .github/workflows/build.yml that runs on every push. It:
+This repository includes a workflow at [`.github/workflows/build.yml`](.github/workflows/build.yml) that runs on every push. It:
 
-generates the Xcode project with XcodeGen
+1. generates the Xcode project with [XcodeGen](https://github.com/yonaskolb/XcodeGen)
+2. builds an unsigned `arm64` app with `xcodebuild`
+3. fake-signs it with `ldid` (or ad-hoc `codesign` as a fallback)
+4. packages it as `DebToIPA.ipa` and uploads it as a build artifact
 
-builds an unsigned arm64 app with xcodebuild
+To build your own copy, fork this repository and open the **Actions** tab.
 
-fake-signs it with ldid (or ad-hoc codesign as a fallback)
+### Option B: On a Mac
 
-packages it as DebToIPA.ipa and uploads it as a build artifact
-
-To build your own copy, fork this repository and open the Actions tab.
-
-Option B: On a Mac
-
+```bash
 brew install xcodegen ldid
 git clone https://github.com/<your-username>/<your-repo>.git
 cd <your-repo>
 xcodegen generate
 open DebToIPA.xcodeproj
+```
 
-To make a TrollStore-ready .ipa from the command line:
+To make a TrollStore-ready `.ipa` from the command line:
 
+```bash
 xcodebuild -project DebToIPA.xcodeproj -target DebToIPA \
   -configuration Release -sdk iphoneos ARCHS=arm64 \
   CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
@@ -169,9 +131,11 @@ xcodebuild -project DebToIPA.xcodeproj -target DebToIPA \
 ldid -S build/DebToIPA.app/DebToIPA
 mkdir -p Payload && cp -R build/DebToIPA.app Payload/
 zip -qry DebToIPA.ipa Payload
+```
 
-Project structure
+## Project structure
 
+```
 .
 ├── .github/workflows/build.yml   # Cloud build that produces the .ipa
 ├── project.yml                   # XcodeGen project definition
@@ -188,22 +152,19 @@ Project structure
     ├── ShareSheet.swift          # System share sheet
     ├── Errors.swift              # User-facing error messages
     └── Assets.xcassets/          # App icon
+```
 
-The app uses only Apple frameworks (SwiftUI, Foundation, Compression). It has no third-party dependencies.
+The app uses only Apple frameworks (SwiftUI, Foundation, Compression). It has **no third-party dependencies**.
 
-Limitations
+## Limitations
 
-Compression: gzip, xz and uncompressed packages are supported. Zstandard (.zst), bzip2 and legacy LZMA are not supported yet.
+- **Compression:** gzip, xz and uncompressed packages are supported. **Zstandard (`.zst`)**, **bzip2** and legacy **LZMA** are not supported yet.
+- **Jailbreak dependencies:** apps made for jailbroken devices may expect jailbreak files, tweaks or system access, so some won't fully work after installing with TrollStore.
+- **Extra package contents:** helpers, daemons, preference bundles and other files outside the `.app` can't be included in an `.ipa`. The app warns you when a package contains them.
+- **Size:** each `.ipa` is limited to 4 GB and 65,535 files (no Zip64).
+- **Signing:** the generated `.ipa` is unsigned. TrollStore handles this; other sideloading tools will re-sign it.
 
-Jailbreak dependencies: apps made for jailbroken devices may expect jailbreak files, tweaks or system access, so some won't fully work after installing with TrollStore.
-
-Extra package contents: helpers, daemons, preference bundles and other files outside the .app can't be included in an .ipa. The app warns you when a package contains them.
-
-Size: each .ipa is limited to 4 GB and 65,535 files (no Zip64).
-
-Signing: the generated .ipa is unsigned. TrollStore handles this; other sideloading tools will re-sign it.
-
-Troubleshooting
+## Troubleshooting
 
 <details>
 <summary><b>"This package is compressed with Zstandard…"</b></summary>
@@ -235,21 +196,21 @@ Scroll the row of apps to the end and tap <b>More</b> to enable TrollStore, or o
 Open the failed run in the <b>Actions</b> tab, expand the red step, and include its log when you open an issue.
 </details>
 
-FAQ
+## FAQ
 
-Does this work without a jailbreak?
-Yes. The converter itself only needs TrollStore. Whether the converted app works without a jailbreak depends on that app.
+**Does this work without a jailbreak?**
+Yes. The converter itself only needs TrollStore. Whether the *converted* app works without a jailbreak depends on that app.
 
-Is anything uploaded?
+**Is anything uploaded?**
 No. Conversion runs entirely on your device.
 
-Can I convert Linux .deb files to run on iOS?
+**Can I convert Linux `.deb` files to run on iOS?**
 No. They are built for a different operating system and processor setup.
 
-Contributing
+## Contributing
 
 Issues and pull requests are welcome. Support for Zstandard-compressed packages would be especially useful.
 
-Disclaimer
+## Disclaimer
 
 This project is not affiliated with TrollStore, Cydia, Sileo or Zebra. Only convert packages you are allowed to use and redistribute. Use at your own risk.
